@@ -62,6 +62,9 @@ jobs:
           project-version: ${{ steps.version.outputs.version }}
           target: ${{ matrix.job.target }}
           nif-version: ${{ matrix.nif }}
+          # Must be the empty string, not "false": the action tests this input
+          # with a GitHub expression, where any non-empty string is truthy.
+          use-cross: ""
           project-dir: "native/rupyex_nif"
 
       - uses: actions/upload-artifact@v4
