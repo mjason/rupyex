@@ -8,7 +8,7 @@ defmodule Rupyex.MixProject do
     [
       app: :rupyex,
       version: @version,
-      elixir: "~> 1.19",
+      elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: "Embed Python in Elixir with RustPython, via Rustler.",
@@ -37,7 +37,7 @@ defmodule Rupyex.MixProject do
     [
       licenses: ["Apache-2.0"],
       links: %{"GitHub" => @source_url},
-      files: ~w(lib guides config native/rupyex_nif/src native/rupyex_nif/Cargo.toml
+      files: ~w(lib guides native/rupyex_nif/src native/rupyex_nif/Cargo.toml
                 native/rupyex_nif/Cargo.lock checksum-Elixir.Rupyex.Native.exs
                 mix.exs README.md LICENSE .formatter.exs)
     ]
