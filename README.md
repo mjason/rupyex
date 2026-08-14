@@ -44,9 +44,17 @@ def deps do
 end
 ```
 
-A Rust toolchain is required to build (Rust 1.93+). The first build compiles
-RustPython and its standard library, which takes a few minutes; after that it
-is cached like any other Rust dependency.
+The NIF ships precompiled for Linux (x86_64, aarch64), macOS (x86_64,
+aarch64) and Windows (x86_64), so no Rust toolchain is needed to install it.
+The precompiled Linux artifacts need glibc 2.35 or newer and the system libffi
+(`libffi8` on Debian/Ubuntu, `libffi` on RHEL) — RustPython links it for
+`ctypes`, and any machine with CPython installed already has it.
+
+To build from source instead — for another platform, or to work on the crate —
+set `RUPYEX_BUILD=1` (or `config :rustler_precompiled, :force_build, rupyex:
+true`) and have Rust 1.93+ available. The first build compiles RustPython and
+its standard library, which takes a few minutes; after that it is cached like
+any other Rust dependency.
 
 ## Usage
 
