@@ -22,3 +22,7 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 rupyex-*.tar
 
+
+# Rust build artifacts and the compiled NIF.
+/native/*/target/
+/priv/native/

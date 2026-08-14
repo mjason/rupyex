@@ -1,0 +1,31 @@
+[package]
+name = "rupyex_nif"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "rupyex_nif"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[features]
+default = ["stdlib"]
+# Embed the Python standard library (native modules + frozen .py sources) into
+# the NIF so no Python installation is required at runtime.
+stdlib = ["dep:rustpython-stdlib", "dep:rustpython-pylib", "rustpython-vm/freeze-stdlib"]
+
+[dependencies]
+rustler = { version = "0.38", features = ["big_integer"] }
+# rustpython-vm 0.5.0 does not build against libc >= 0.2.187 (POSIX_SPAWN_SETSID
+# changed from c_int to c_short); keep it pinned until upstream catches up.
+libc = ">=0.2.183, <0.2.187"
+rustpython-vm = { version = "0.5", features = ["threading"] }
+rustpython-stdlib = { version = "0.5", optional = true, default-features = false, features = ["compiler", "threading"] }
+rustpython-pylib = { version = "0.5", optional = true, features = ["freeze-stdlib"] }
+num-traits = "0.2"
+malachite-bigint = "0.9"
+
+[profile.release]
+opt-level = 2
+codegen-units = 16
