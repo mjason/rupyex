@@ -26,3 +26,6 @@ rupyex-*.tar
 # Rust build artifacts and the compiled NIF.
 /native/*/target/
 /priv/native/
+
+# Generated at release time from the published artifacts, never by hand.
+/checksum-*.exs

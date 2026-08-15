@@ -102,11 +102,29 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build the checksum file from the release artifacts
+        # Not `mix rustler_precompiled.download`: that task compiles the project
+        # first, and compiling in precompiled mode needs the very checksum file
+        # it is meant to produce. The file is just a map of artifact name to
+        # digest, which the released tarballs give us directly.
+        run: |
+          mkdir -p artifacts
+          gh release download "$GITHUB_REF_NAME" --dir artifacts --pattern '*.tar.gz'
+          {
+            echo "%{"
+            for file in artifacts/*.tar.gz; do
+              printf '  "%s" => "sha256:%s",\n' \
+                "$(basename "$file")" "$(sha256sum "$file" | cut -d' ' -f1)"
+            done
+            echo "}"
+          } | tee checksum-Elixir.Rupyex.Native.exs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - run: mix deps.get
 
-      - name: Build the checksum file
-        run: mix rustler_precompiled.download Rupyex.Native --all --print
-
+      # Compiling here downloads the artifact for this platform and checks it
+      # against the file above, so publishing also proves the install works.
       - name: Publish to Hex
         run: mix hex.publish --yes
         env:
